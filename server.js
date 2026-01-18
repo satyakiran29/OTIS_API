@@ -14,7 +14,9 @@ mongoose
   .catch(err => console.log(err));
 
 app.use("/api/auth", require("./routes/auth"));
-
+app.get("/", (req, res) => {
+  res.send("🚀 Server is live! Developed by Satya Kiran");
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
   console.log(`Server running on port ${PORT}  Developed by Satya Kiran`)
