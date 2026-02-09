@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
 });
 
 // ✅ LOAD ROUTES SAFELY
-// app.use("/api/temples", require("../routes/temples"));
+app.use("/api/temples", require("../routes/temples"));
 // app.use("/api/auth", require("../routes/auth"));
 
 // ❌ NO app.listen
