@@ -9,7 +9,12 @@ const generateToken = (id) => {
 };
 
 const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, mobile } = req.body;
+    const { isValid, errors } = require('../utils/passwordValidator')(password);
+
+    if (!isValid) {
+        return res.status(400).json({ message: errors.join(', ') });
+    }
 
     try {
         const userExists = await User.findOne({ email });
@@ -24,6 +29,7 @@ const register = async (req, res) => {
         const user = await User.create({
             name,
             email,
+            mobile,
             password: hashedPassword,
         });
 
