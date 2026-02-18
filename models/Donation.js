@@ -15,9 +15,23 @@ const donationSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    donorName: { type: String, required: true },
+    gothram: { type: String },
+    occasion: { type: String },
+    dob: { type: Date },
+    gender: { type: String },
+    address: { type: String, required: true },
+    address2: { type: String },
+    city: { type: String, required: true },
+    zipcode: { type: String, required: true },
+    state: { type: String, required: true },
+    country: { type: String, default: 'India' },
+    mobile: { type: String, required: true },
+
+    donationDate: { type: Date },
     paymentMethod: {
         type: String,
-        default: 'Card' // For now, defaulting to Card as we don't have real payment gateway
+        default: 'Card'
     },
     status: {
         type: String,

@@ -5,13 +5,21 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 // Create a new donation
 router.post('/', protect, async (req, res) => {
-    const { templeId, amount, paymentMethod } = req.body;
+    const {
+        templeId, amount, paymentMethod,
+        donorName, gothram, occasion, dob, gender,
+        address, address2, city, zipcode, state, country,
+        mobile, donationDate
+    } = req.body;
 
     const donation = new Donation({
         user: req.user._id,
         temple: templeId,
         amount,
-        paymentMethod
+        paymentMethod,
+        donorName, gothram, occasion, dob, gender,
+        address, address2, city, zipcode, state, country,
+        mobile, donationDate
     });
 
     try {

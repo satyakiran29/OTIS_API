@@ -73,4 +73,26 @@ router.put('/:id/cancel', protect, async (req, res) => {
     }
 });
 
+// Update booking status (Admin only)
+router.put('/:id/status', protect, admin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        console.log(`Updating booking ${req.params.id} status to: ${status}`); // Debug log
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            console.log('Booking not found');
+            return res.status(404).json({ message: 'Booking not found' });
+        }
+
+        booking.status = status;
+        const updatedBooking = await booking.save();
+        console.log('Booking updated successfully:', updatedBooking);
+        res.json(updatedBooking);
+    } catch (err) {
+        console.error('Error updating booking:', err);
+        res.status(400).json({ message: err.message });
+    }
+});
+
 module.exports = router;

@@ -34,6 +34,10 @@ app.use('/api/donations', require('./routes/donations'));
 app.use('/api/accommodations', require('./routes/accommodations'));
 app.use('/api/users', require('./routes/users'));
 
+// Start background jobs
+const startAutoConfirmJob = require('./utils/autoConfirmBookings');
+startAutoConfirmJob();
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
