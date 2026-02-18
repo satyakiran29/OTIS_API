@@ -17,10 +17,13 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 
+// Serve static files from the public directory
+app.use(express.static('public'));
+
 // Routes
-app.get('/', (req, res) => {
-    res.send('API is running...');
-});
+// app.get('/', (req, res) => {
+//     res.send('API is running...');
+// });
 
 const templeRoutes = require('./routes/temples');
 const authRoutes = require('./routes/auth');
