@@ -97,7 +97,6 @@ router.post('/', protect, admin, async (req, res) => {
         description: req.body.description,
         price: req.body.price,
         temple: req.body.temple,
-        temple: req.body.temple,
         duration: req.body.duration,
         ticketLimit: req.body.ticketLimit
     });

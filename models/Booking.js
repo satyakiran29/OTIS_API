@@ -33,6 +33,10 @@ const bookingSchema = new mongoose.Schema({
     members: {
         type: Number,
         default: 1
+    },
+    paymentIntentId: {
+        type: String,
+        default: null
     }
 }, { timestamps: true });
 

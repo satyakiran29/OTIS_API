@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Donation = require('../models/Donation');
 const { protect, admin } = require('../middleware/authMiddleware');
+const sendEmail = require('../utils/sendEmail');
 
 // Create a new donation
 router.post('/', protect, async (req, res) => {
@@ -23,7 +24,26 @@ router.post('/', protect, async (req, res) => {
     });
 
     try {
-        constnewDonation = await donation.save();
+        const newDonation = await donation.save();
+
+        // Send Donation Receipt email asynchronously
+        sendEmail({
+            email: req.user.email,
+            subject: 'Donation Receipt - Temple Info System',
+            html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <h2>Thank you for your generous donation, ${req.user.name}!</h2>
+                    <p>We have successfully received your donation of <strong>₹${amount}</strong>.</p>
+                    <p>Your support helps us maintain the heritage and spiritual activities of our temples.</p>
+                    <ul>
+                        <li><strong>Receipt ID:</strong> ${newDonation._id}</li>
+                        <li><strong>Date:</strong> ${new Date(donationDate).toLocaleDateString()}</li>
+                    </ul>
+                    <p>May blessings be upon you.</p>
+                </div>
+            `
+        });
+
         res.status(201).json(newDonation);
     } catch (err) {
         res.status(400).json({ message: err.message });
