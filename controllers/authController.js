@@ -99,6 +99,7 @@ const register = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isTwoStepVerificationEnabled: user.isTwoStepVerificationEnabled,
                 token: generateToken(user._id),
             });
         } else {
@@ -116,6 +117,18 @@ const login = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await bcrypt.compare(password, user.password))) {
+
+            // If 2SV is not enabled, skip OTP generation and just grant token
+            if (!user.isTwoStepVerificationEnabled) {
+                return res.json({
+                    _id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                    isTwoStepVerificationEnabled: user.isTwoStepVerificationEnabled,
+                    token: generateToken(user._id),
+                });
+            }
 
             // If OTP is not provided, generate and send it
             if (!otp) {
@@ -156,11 +169,12 @@ const login = async (req, res) => {
             // Cleanup OTP
             await Otp.deleteOne({ email });
 
-            res.json({
+            res.status(201).json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                isTwoStepVerificationEnabled: user.isTwoStepVerificationEnabled,
                 token: generateToken(user._id),
             });
         } else {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { protect, admin } = require('../middleware/authMiddleware');
+const { toggleTwoStepVerification, updatePassword, updateProfile, deleteAccount } = require('../controllers/userController');
 
 // Get all users (Admin only)
 router.get('/', protect, admin, async (req, res) => {
@@ -51,5 +52,17 @@ router.put('/:id/role', protect, admin, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// Toggle 2SV (Authenticated user)
+router.put('/profile/two-step-verification', protect, toggleTwoStepVerification);
+
+// Update user password (Authenticated user)
+router.put('/profile/password', protect, updatePassword);
+
+// Update user profile (Authenticated user)
+router.put('/profile', protect, updateProfile);
+
+// Delete own account (Authenticated user)
+router.delete('/profile', protect, deleteAccount);
 
 module.exports = router;
