@@ -20,6 +20,16 @@ const templeSchema = new mongoose.Schema({
     images: {
         type: [String],
         default: []
+    },
+    coordinates: {
+        lat: {
+            type: Number,
+            required: false
+        },
+        lon: {
+            type: Number,
+            required: false
+        }
     }
 }, { timestamps: true });
 

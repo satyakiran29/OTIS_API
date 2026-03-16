@@ -31,7 +31,8 @@ router.post('/', protect, admin, async (req, res) => {
         location: req.body.location,
         description: req.body.description,
         history: req.body.history,
-        images: req.body.images
+        images: req.body.images,
+        coordinates: req.body.coordinates
     });
 
     try {
@@ -53,6 +54,13 @@ router.put('/:id', protect, admin, async (req, res) => {
         temple.description = req.body.description || temple.description;
         temple.history = req.body.history || temple.history;
         temple.images = req.body.images || temple.images;
+        
+        if (req.body.coordinates) {
+            temple.coordinates = {
+                lat: req.body.coordinates.lat !== undefined ? req.body.coordinates.lat : temple.coordinates?.lat,
+                lon: req.body.coordinates.lon !== undefined ? req.body.coordinates.lon : temple.coordinates?.lon
+            };
+        }
 
         const updatedTemple = await temple.save();
         res.json(updatedTemple);
