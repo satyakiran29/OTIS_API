@@ -1,30 +1,39 @@
 const mongoose = require('mongoose');
 
 const eventSchema = new mongoose.Schema({
-    title: {
+    name: {
         type: String,
-        required: true
+        required: [true, 'Please add an event name'],
     },
     description: {
         type: String,
-        required: true
+        required: [true, 'Please add a description'],
+    },
+    category: {
+        type: String,
+        enum: ['Daily', 'Weekly', 'Monthly', 'Annual'],
+        required: [true, 'Please select a category'],
     },
     date: {
         type: Date,
-        required: true
+        required: [true, 'Please add a date'],
+    },
+    time: {
+        type: String,
     },
     location: {
         type: String,
-        required: true
+    },
+    imageUrl: {
+        type: String,
     },
     temple: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Temple',
-        required: false // events might not strictly be tied to a specific temple in the generic list
+        required: [true, 'Please associate this event with a temple'],
     },
-    image: {
-        type: String
-    }
-}, { timestamps: true });
+}, {
+    timestamps: true,
+});
 
 module.exports = mongoose.model('Event', eventSchema);

@@ -37,6 +37,7 @@ app.use('/api/donations', require('./routes/donations'));
 app.use('/api/accommodations', require('./routes/accommodations'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/payments', require('./routes/payments'));
+app.use('/api/chat', require('./routes/chat'));
 
 // Start background jobs
 const startAutoConfirmJob = require('./utils/autoConfirmBookings');

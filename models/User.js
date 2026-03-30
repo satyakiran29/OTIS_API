@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
     isTwoStepVerificationEnabled: {
         type: Boolean,
         default: false
+    },
+    temple: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Temple',
     }
 }, { timestamps: true });
 
