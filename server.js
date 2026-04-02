@@ -20,6 +20,11 @@ mongoose.connect(process.env.MONGO_URI)
 // Serve static files from the public directory
 app.use(express.static('public'));
 
+// Ping route to keep server awake
+app.get('/ping', (req, res) => {
+    res.status(200).send('API is awake!');
+});
+
 // Routes
 // app.get('/', (req, res) => {
 //     res.send('API is running...');
@@ -42,6 +47,9 @@ app.use('/api/chat', require('./routes/chat'));
 // Start background jobs
 const startAutoConfirmJob = require('./utils/autoConfirmBookings');
 startAutoConfirmJob();
+
+const startKeepAliveJob = require('./utils/keepAlive');
+startKeepAliveJob();
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
