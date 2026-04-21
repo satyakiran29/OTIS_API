@@ -6,21 +6,23 @@ const { protect } = require('../middleware/authMiddleware');
 // Create a Payment Intent
 router.post('/create-payment-intent', protect, async (req, res) => {
     try {
-        const { amount, description, metadata } = req.body;
+        const { amount, description, metadata, paymentMethodType } = req.body;
 
         // Stripe requires the amount in the smallest currency unit (e.g., paise for INR)
         const paymentIntent = await stripe.paymentIntents.create({
             amount: amount * 100,
             currency: 'inr',
             description: description || 'Otis Platform Payment',
+            payment_method_types: paymentMethodType ? [paymentMethodType] : ['card', 'upi'],
             metadata: {
-                ...metadata,
                 userId: req.user._id.toString(),
                 userName: req.user.name,
-                userEmail: req.user.email
-            },
-            automatic_payment_methods: {
-                enabled: true,
+                userEmail: req.user.email,
+                
+                // Spread the rest of metadata safely (ensure they are strings)
+                ...Object.fromEntries(
+                    Object.entries(metadata || {}).map(([k, v]) => [k, v == null ? '' : String(v)])
+                ),
             },
         });
 

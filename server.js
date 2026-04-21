@@ -10,6 +10,10 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+
+// Stripe Webhook needs the raw body to verify signature
+app.use('/api/webhook', express.raw({ type: 'application/json' }), require('./routes/stripeWebhooks'));
+
 app.use(express.json());
 
 // MongoDB Connection
