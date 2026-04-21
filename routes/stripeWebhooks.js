@@ -27,6 +27,11 @@ router.post('/', async (req, res) => {
         try {
             const metadata = paymentIntent.metadata;
 
+            if (metadata.type !== 'donation') {
+                console.log(`Payment intent succeeded for non-donation: ${metadata.bookingType || metadata.type}`);
+                return res.json({ received: true });
+            }
+
             // Create donation using metadata
             const donation = new Donation({
                 user: metadata.userId,

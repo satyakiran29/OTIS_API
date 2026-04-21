@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protect, admin, superAdmin } = require('../middleware/authMiddleware');
 const { toggleTwoStepVerification, updatePassword, updateProfile, deleteAccount } = require('../controllers/userController');
 
 // Get all users (Admin only)
@@ -14,8 +14,8 @@ router.get('/', protect, admin, async (req, res) => {
     }
 });
 
-// Delete user (Admin only)
-router.delete('/:id', protect, admin, async (req, res) => {
+// Delete user (Super-Admin only)
+router.delete('/:id', protect, superAdmin, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
@@ -29,8 +29,8 @@ router.delete('/:id', protect, admin, async (req, res) => {
     }
 });
 
-// Update user role (Admin only)
-router.put('/:id/role', protect, admin, async (req, res) => {
+// Update user role (Super-Admin only)
+router.put('/:id/role', protect, superAdmin, async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.id,
