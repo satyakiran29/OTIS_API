@@ -19,6 +19,9 @@ router.delete('/:id', protect, superAdmin, async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (user) {
+            if (user.role === 'super-admin') {
+                return res.status(403).json({ message: 'Cannot delete a super-admin account' });
+            }
             await user.deleteOne();
             res.json({ message: 'User removed' });
         } else {
@@ -32,22 +35,25 @@ router.delete('/:id', protect, superAdmin, async (req, res) => {
 // Update user role (Super-Admin only)
 router.put('/:id/role', protect, superAdmin, async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(
-            req.params.id,
-            { role: req.body.role || 'user' }, // Default to 'user' if not provided, though existing check should handle it
-            { new: true, runValidators: false } // runValidators: false is key here if we want to skip other fields validation
-        ).select('-password');
-
-        if (user) {
-            res.json({
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-            });
-        } else {
-            res.status(404).json({ message: 'User not found' });
+        const user = await User.findById(req.params.id);
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
         }
+
+        if (user.role === 'super-admin') {
+            return res.status(403).json({ message: 'Cannot modify the role of a super-admin' });
+        }
+
+        user.role = req.body.role || 'user';
+        await user.save();
+
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
