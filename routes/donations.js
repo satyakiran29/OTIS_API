@@ -51,15 +51,6 @@ router.post('/', protect, async (req, res) => {
 });
 
 // Get user's donations
-router.get('/myquestions', protect, async (req, res) => { // Typo in original plan, fixing to /my
-    try {
-        const donations = await Donation.find({ user: req.user._id }).populate('temple', 'name');
-        res.json(donations);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
 // Fix route path to be standard
 router.get('/my', protect, async (req, res) => {
     try {
@@ -70,10 +61,16 @@ router.get('/my', protect, async (req, res) => {
     }
 });
 
-// Get all donations (Admin only)
+// Get all donations (Admin & Super Admin)
 router.get('/', protect, admin, async (req, res) => {
     try {
-        const donations = await Donation.find()
+        let query = {};
+        // If user is an admin (but not super-admin), filter by their assigned temple
+        if (req.user.role !== 'super-admin' && req.user.temple) {
+            query.temple = req.user.temple;
+        }
+
+        const donations = await Donation.find(query)
             .populate('user', 'name email')
             .populate('temple', 'name');
         res.json(donations);
