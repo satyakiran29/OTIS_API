@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
                 state: metadata.state,
                 country: metadata.country,
                 mobile: metadata.mobile,
+                donationDate: metadata.donationDate,
                 paymentMethod: 'Card',
                 status: 'completed'
             });
@@ -66,7 +67,9 @@ router.post('/', async (req, res) => {
                             <p>Your support helps us maintain the heritage and spiritual activities of our temples.</p>
                             <ul>
                                 <li><strong>Receipt ID:</strong> ${savedDonation._id}</li>
+                                  <li><strong>Date:</strong> ${new Date(metadata.donationDate).toLocaleDateString()}</li>
                             </ul>
+                            
                             <p>May blessings be upon you.</p>
                         </div>
                     `
