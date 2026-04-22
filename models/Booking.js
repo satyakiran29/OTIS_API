@@ -8,7 +8,7 @@ const bookingSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['event', 'seva', 'darshan', 'accommodation'],
+        enum: ['event', 'seva', 'darshan'],
         required: true
     },
     item: {
@@ -19,7 +19,7 @@ const bookingSchema = new mongoose.Schema({
     typeModel: {
         type: String,
         required: true,
-        enum: ['Event', 'Seva', 'Temple', 'Accommodation'] // 'Temple' for general darshan entries if applicable, or keep specific
+        enum: ['Event', 'Seva', 'Temple'] // 'Temple' for general darshan entries if applicable, or keep specific
     },
     date: {
         type: Date,
