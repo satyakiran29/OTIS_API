@@ -20,10 +20,10 @@ graph TD
     CORS --> Routes
     
     subgraph Routes
-        R_Auth[/api/auth]
-        R_Bookings[/api/bookings]
-        R_Payments[/api/payments & /api/webhook]
-        R_Core[/api/temples, /api/sevas, /api/events]
+        R_Auth["/api/auth"]
+        R_Bookings["/api/bookings"]
+        R_Payments["/api/payments & /api/webhook"]
+        R_Core["/api/temples, /api/sevas, /api/events"]
     end
     
     Routes --> R_Auth & R_Bookings & R_Payments & R_Core
@@ -134,7 +134,7 @@ graph TD
     
     AutoConfirm --> Query[Find Pending Bookings > 15 mins]
     Query --> DB[(MongoDB)]
-    DB -->> AutoConfirm: Returns Expired Bookings
+    DB -.->|Returns Expired Bookings| AutoConfirm
     
     AutoConfirm --> Loop[For each Booking]
     Loop --> Update[Mark Status as 'Cancelled']
@@ -142,7 +142,7 @@ graph TD
     
     Cron2([Ping Interval]) -->|Triggers| KeepAlive[Server Ping]
     KeepAlive -->|GET /ping| Server[API Server]
-    Server -->> KeepAlive: 200 OK
+    Server -.->|200 OK| KeepAlive
 ```
 
 ### 5. Admin Temple Management Flow
